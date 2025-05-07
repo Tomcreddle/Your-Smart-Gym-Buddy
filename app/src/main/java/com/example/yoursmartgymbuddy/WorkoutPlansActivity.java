@@ -67,7 +67,9 @@ public class WorkoutPlansActivity extends AppCompatActivity implements Navigatio
             int itemId = item.getItemId();
 
             if (itemId == R.id.bottom_home) {
-                // Already on Home
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
                 return true;
             } else if (itemId == R.id.bottom_Todo) {
                 startActivity(new Intent(getApplicationContext(), ToDoList.class));
