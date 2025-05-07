@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "965957167891",
+    "project_id": "your-smart-gym-buddy",
+    "storage_bucket": "your-smart-gym-buddy.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965957167891:android:bee5f03a394d24f0fac8e6",
+        "android_client_info": {
+          "package_name": "com.example.yoursmartgymbuddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCv6wYi7eXbesFsGxnFIYUMsNGHWfcvbk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

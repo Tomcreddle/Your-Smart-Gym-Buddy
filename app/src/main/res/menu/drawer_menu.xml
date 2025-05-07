@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Nutrition Plan -->
+    <item
+        android:id="@+id/nav_nutrition"
+        android:title="Nutrition Plan"
+        android:icon="@drawable/nutri" />
+
+    <!-- Workout Plans -->
+    <item
+        android:id="@+id/nav_workout"
+        android:title="Workout Plans"
+        android:icon="@drawable/progress" />
+
+    <!-- Progress Tracking -->
+    <item
+        android:id="@+id/nav_progress"
+        android:title="Progress Tracking"
+        android:icon="@drawable/note" />
+    <!-- Workouts Section -->
+    <item
+        android:id="@+id/nav_workouts"
+        android:title="Workouts"
+        android:icon="@drawable/exercise" />
+
+    <!-- Logout -->
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Logout"
+        android:icon="@drawable/logout" />
+
+</menu>
