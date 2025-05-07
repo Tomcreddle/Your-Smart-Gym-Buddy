@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -57,13 +58,40 @@ public class WorkoutsActivity extends AppCompatActivity implements NavigationVie
         if (user != null) {
             headerEmail.setText(user.getEmail());
         }
+
+        // ✅ BottomNavigationView setup
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
+        bottomNav.setSelectedItemId(R.id.bottom_home);
+
+        bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.bottom_home) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            } else if (itemId == R.id.bottom_Todo) {
+                startActivity(new Intent(getApplicationContext(), ToDoList.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            } else if (itemId == R.id.bottom_account) {
+                startActivity(new Intent(getApplicationContext(), AccountSettings.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            }
+
+            return false;
+        });
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_workouts) {
-
+            // Already here
         } else if (id == R.id.nav_nutrition) {
             startActivity(new Intent(this, NutritionActivity.class));
         } else if (id == R.id.nav_workout) {
