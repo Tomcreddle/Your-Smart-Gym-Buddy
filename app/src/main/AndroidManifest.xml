@@ -55,7 +55,12 @@
             android:exported="true" />
         <activity
             android:name=".WorkoutsActivity"
-            android:exported="true" /> <!-- Splash Activity (launcher) -->
+            android:exported="true" />
+
+        <!-- Add the declaration for WorkoutDetailActivity here -->
+        <activity android:name=".WorkoutDetailActivity" />
+
+        <!-- Splash Activity (launcher) -->
         <activity
             android:name=".SplashActivity"
             android:exported="true"

@@ -31,58 +31,14 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Vertical list of 5 image containers aligned to the left -->
-            <LinearLayout
+            <!-- RecyclerView for the list of workouts -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/workoutsRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="start"
-                android:layout_marginBottom="16dp">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_gravity="start"
-                    android:background="@android:color/darker_gray"
-                    android:src="@drawable/green1"/>
-
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_gravity="start"
-                    android:background="@android:color/darker_gray"
-                    android:src="@drawable/green"/>
-
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_gravity="start"
-                    android:background="@android:color/darker_gray"
-                    android:src="@drawable/logogym" />
-
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_gravity="start"
-                    android:background="@android:color/darker_gray"
-                    android:src="@drawable/healthy"/>
-
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_gravity="start"
-                    android:background="@android:color/darker_gray"
-                    android:src="@drawable/gym"/>
-
-
-            </LinearLayout>
-
-            <!-- RecyclerView -->
         </LinearLayout>
 
         <!-- Bottom Navigation -->
