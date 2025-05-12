@@ -3,7 +3,13 @@ package com.example.yoursmartgymbuddy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -16,19 +22,25 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // Create a Handler to delay the splash screen
-        new Handler(getMainLooper()).postDelayed(() -> {
-            // Check if the user is logged in
-            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        // Find views
+        ImageView logo = findViewById(R.id.logoImage);
+        TextView title = findViewById(R.id.textAppTitle);
 
-            // Navigate to the appropriate activity
+        // Load fade-in animation
+        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+
+        // Apply animation
+        logo.startAnimation(fadeIn);
+        title.startAnimation(fadeIn);
+
+        // Delay to navigate to next screen
+        new Handler(getMainLooper()).postDelayed(() -> {
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             if (currentUser != null) {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
             } else {
                 startActivity(new Intent(SplashActivity.this, LoginActivity.class));
             }
-
-            // Finish SplashActivity so the user can't go back to it
             finish();
         }, SPLASH_DURATION);
     }

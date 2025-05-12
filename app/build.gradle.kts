@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.material)  // Add this line
     implementation("com.google.android.material:material:1.4.0")  // or the latest version
 
+    implementation ("androidx.recyclerview:recyclerview:1.2.1")
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation("androidx.cardview:cardview:1.0.0")
@@ -56,6 +57,11 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
+
+    implementation ("org.osmdroid:osmdroid-android:6.1.16")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation ("com.google.code.gson:gson:2.8.9")
+
 
     // Play Services (for authentication, if needed)
     implementation(libs.credentials.play.services.auth)

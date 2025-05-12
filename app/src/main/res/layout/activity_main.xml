@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F2EED7">
 
     <!-- Main content -->
 
@@ -58,7 +59,7 @@
                     android:id="@+id/nutritionImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:alpha="0.2"
+                    android:alpha="0.3"
                     android:contentDescription="Nutrition Icon"
                     android:scaleType="fitXY"
                     android:src="@drawable/healthy" />
@@ -229,17 +230,18 @@
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bottom_background"
-            android:layout_marginEnd="20dp"
+            android:layout_gravity="bottom"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="30dp"
-            android:layout_marginTop="750dp"
+            android:background="@drawable/bottom_background"
             android:elevation="2dp"
-            app:menu="@menu/bottom_menu"
             app:itemIconSize="30dp"
             app:itemIconTint="@drawable/item_selector"
             app:itemRippleColor="@android:color/transparent"
-            app:labelVisibilityMode="unlabeled"/>
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/bottom_menu" />
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

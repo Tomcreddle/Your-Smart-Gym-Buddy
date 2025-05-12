@@ -16,7 +16,6 @@ public class AccountSettings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_settings);
 
-        // BottomNavigationView setup
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setSelectedItemId(R.id.bottom_account);
 
@@ -33,6 +32,16 @@ public class AccountSettings extends AppCompatActivity {
                 return true;
             } else if (itemId == R.id.bottom_home) {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            } else if (itemId == R.id.bottom_ai) {
+                startActivity(new Intent(getApplicationContext(), AI.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            } else if (itemId == R.id.bottom_maps) {
+                startActivity(new Intent(getApplicationContext(), Maps.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
                 return true;

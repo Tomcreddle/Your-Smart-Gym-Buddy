@@ -2,11 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="160dp"
-    android:background="#27391C"
+    android:background="@drawable/nav_header_gradient"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp">
 
+    <ImageView
+        android:layout_width="85dp"
+        android:layout_height="74dp"
+        android:src="@drawable/logoofthegym" />
     <TextView
         android:id="@+id/headerTitle"
         android:layout_width="wrap_content"

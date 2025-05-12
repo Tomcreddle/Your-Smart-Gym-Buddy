@@ -11,6 +11,15 @@
         android:title="To do"/>
 
     <item
+        android:id="@+id/bottom_maps"
+        android:icon="@drawable/baseline_add_location_24"
+        android:title="Maps"/>
+    <item
+        android:id="@+id/bottom_ai"
+        android:icon="@drawable/code"
+        android:title="AI"/>
+
+    <item
         android:id="@+id/bottom_account"
         android:icon="@drawable/baseline_account_circle_24"
         android:title="Account"/>

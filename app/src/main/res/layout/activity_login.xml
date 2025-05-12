@@ -3,33 +3,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="32dp">
+    android:gravity="center"
+    android:padding="30dp"
+    android:background="#F2EED7">
+
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/logoofthegym"
+        android:contentDescription="App Logo"
+        android:layout_marginBottom="20dp"
+        android:clipToOutline="true"
+        android:background="@android:color/transparent" />
 
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter your email"
-        android:inputType="textEmailAddress"/>
+        android:inputType="textEmailAddress"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter your password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"/>
+        android:text="Login"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#798645"
+        android:layout_marginBottom="16dp"
+        android:padding="12dp"
+        android:textStyle="bold" />
+
+    <!-- New Button for Guest User -->
+    <Button
+        android:id="@+id/guestButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue as Guest"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#ABBA7C"
+        android:layout_marginBottom="16dp"
+        android:padding="12dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/signupLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Don't have an account? Sign up here."
-        android:textColor="@android:color/holo_blue_dark"/>
+        android:textColor="#1976D2"
+        android:layout_gravity="center" />
 </LinearLayout>
-

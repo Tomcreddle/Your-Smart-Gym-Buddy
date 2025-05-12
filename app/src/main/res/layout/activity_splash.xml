@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gym"> <!-- Your background image -->
+    android:background="@drawable/darkgreen"> <!-- Your background image -->
 
     <!-- Centered content -->
     <LinearLayout
@@ -13,9 +13,10 @@
 
         <!-- Logo Image -->
         <ImageView
+            android:id="@+id/logoImage"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:src="@drawable/logogym"
+            android:src="@drawable/logoofthegym"
             android:contentDescription="App Logo"
             android:layout_marginBottom="20dp"
             android:clipToOutline="true"
@@ -23,12 +24,11 @@
 
         <!-- App Name Text -->
         <TextView
+            android:id="@+id/textAppTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Your Smart Gym Buddy"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:textColor="@color/black" />
+            style="@style/GymBuddyTitle"
+            android:layout_marginTop="16dp" />
     </LinearLayout>
 </RelativeLayout>

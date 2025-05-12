@@ -112,6 +112,16 @@ public class NutritionActivity extends AppCompatActivity implements NavigationVi
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
                 return true;
+            } else if (itemId == R.id.bottom_maps) {
+                startActivity(new Intent(getApplicationContext(), Maps.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
+            } else if (itemId == R.id.bottom_ai) {
+                startActivity(new Intent(getApplicationContext(), AI.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                return true;
             } else if (itemId == R.id.bottom_account) {
                 startActivity(new Intent(getApplicationContext(), AccountSettings.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);

@@ -18,7 +18,7 @@
 
     <!-- NoActionBar variant for Splash screen -->
     <style name="Theme.YourSmartGymBuddy.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:windowBackground">#FEFAE0</item> <!-- or any splash background -->
+        <item name="android:windowBackground">#161602</item> <!-- or any splash background -->
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
