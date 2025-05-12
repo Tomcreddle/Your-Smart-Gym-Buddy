@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:id="@+id/nutritionCard"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     android:elevation="4dp"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    app:cardCornerRadius="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,22 +15,60 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/nutritionTitle"
+        <!-- Horizontal layout for image and initial text -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Title"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
+            <ImageView
+                android:id="@+id/imageViewNutrition"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/nutrition_image_description"
+                android:layout_marginEnd="16dp"/> <!-- Margin to the right of the image -->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nutritionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Title"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <!-- This TextView will show the short description initially -->
+                <TextView
+                    android:id="@+id/nutritionShortDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Short Description"
+                    android:textSize="14sp"
+                    android:maxLines="3"
+                    android:ellipsize="end"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- This TextView will show the full description on click -->
         <TextView
-            android:id="@+id/nutritionDescription"
+            android:id="@+id/nutritionFullDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description"
-            android:textSize="14sp" />
+            android:layout_marginTop="8dp"
+            android:text="Full Description"
+            android:textSize="14sp"
+            android:visibility="gone" /> <!-- Initially hidden -->
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
-
-

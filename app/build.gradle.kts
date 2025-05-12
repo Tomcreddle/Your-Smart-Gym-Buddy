@@ -41,11 +41,14 @@ android {
     // }
 }
 
+
+
 dependencies {
     // Basic Libraries
     implementation(libs.appcompat)
     implementation(libs.material)  // Add this line
     implementation("com.google.android.material:material:1.4.0")  // or the latest version
+    implementation("com.google.gms:google-services:4.4.1")
 
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
     implementation(libs.activity)
@@ -61,6 +64,7 @@ dependencies {
     implementation ("org.osmdroid:osmdroid-android:6.1.16")
     implementation ("com.squareup.okhttp3:okhttp:4.9.3")
     implementation ("com.google.code.gson:gson:2.8.9")
+    implementation("com.google.firebase:firebase-firestore")
 
 
     // Play Services (for authentication, if needed)

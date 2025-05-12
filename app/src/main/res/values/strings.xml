@@ -6,5 +6,6 @@
     <string name="app_widget_description">This is an app widget description</string>
     <string name="app_name">Your Smart Gym Buddy</string>
     <string name="openai_api_key">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
-</string> <!-- Add your key here -->
+</string>
+    <string name="nutrition_image_description" /> <!-- Add your key here -->
 </resources>

@@ -1,7 +1,8 @@
-package com.example.yoursmartgymbuddy;
+package com.example.yoursmartgymbuddy; // << REPLACE WITH YOUR PACKAGE NAME
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log; // Import Log
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -24,7 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NutritionActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -75,28 +78,25 @@ public class NutritionActivity extends AppCompatActivity implements NavigationVi
         // RecyclerView setup
         nutritionRecyclerView = findViewById(R.id.nutritionRecyclerView);
         nutritionPlans = new ArrayList<>();
+        // You will need to create a NutritionAdapter class that extends RecyclerView.Adapter
+        // and a NutritionPlan class to hold your data.
         nutritionAdapter = new NutritionAdapter(nutritionPlans, this);
         nutritionRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         nutritionRecyclerView.setAdapter(nutritionAdapter);
 
         db = FirebaseFirestore.getInstance();
-        db.collection("nutritionPlans")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        String title = doc.getString("title");
-                        String description = doc.getString("description");
-                        String imageUrl = doc.getString("imageUrl");
-                        nutritionPlans.add(new NutritionPlan(title, description, imageUrl));
-                    }
-                    nutritionAdapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(NutritionActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show()
-                );
+
+        // Call this method ONCE to add initial data to Firestore
+        // UNCOMMENT the line below, run your app once to populate the database,
+        // then COMMENT it out again.
+        // addInitialNutritionPlans();
+
+        // Fetch data from Firestore
+        fetchNutritionPlans();
 
         // ✅ BottomNavigationView setup
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
+        // Ensure R.id.bottom_home is a valid menu item ID in your bottom_menu.xml
         bottomNav.setSelectedItemId(R.id.bottom_home);
 
         bottomNav.setOnItemSelectedListener(item -> {
@@ -132,6 +132,69 @@ public class NutritionActivity extends AppCompatActivity implements NavigationVi
             return false;
         });
     }
+
+    // Method to fetch nutrition plans from Firestore
+    private void fetchNutritionPlans() {
+        db.collection("nutritionPlans")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    nutritionPlans.clear(); // Clear existing data before adding new
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        // Ensure these fields exist in your Firestore documents
+                        String title = doc.getString("title");
+                        String description = doc.getString("description");
+                        String imageUrl = doc.getString("imageUrl");
+                        // Ensure the NutritionPlan constructor matches these parameters
+                        nutritionPlans.add(new NutritionPlan(title, description, imageUrl));
+                    }
+                    nutritionAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error fetching data", e); // Log the error for debugging
+                    Toast.makeText(NutritionActivity.this, "Error fetching data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    // Method to add initial nutrition plans to Firestore
+    private void addInitialNutritionPlans() {
+        List<NutritionPlan> initialPlans = new ArrayList<>();
+        initialPlans.add(new NutritionPlan(
+                "Balanced Diet",
+                "A balanced diet includes a variety of foods from all food groups in the right proportions. This plan focuses on whole grains, lean proteins, fruits, vegetables, and healthy fats. It provides the necessary nutrients for overall health and well-being.",
+                "https://via.placeholder.com/400x200?text=Balanced+Diet" // Replace with a real image URL
+        ));
+        initialPlans.add(new NutritionPlan(
+                "High-Protein Meal Plan",
+                "This plan is designed for muscle growth and repair, featuring meals rich in lean protein sources like chicken breast, fish, eggs, and legumes. It's often combined with strength training for best results.",
+                "https://via.placeholder.com/400x200?text=High-Protein+Plan" // Replace with a real image URL
+        ));
+        initialPlans.add(new NutritionPlan(
+                "Weight Loss Plan",
+                "A calorie-controlled plan that emphasizes nutrient-dense foods to help create a calorie deficit. It typically involves portion control and limiting processed foods, sugary drinks, and unhealthy fats.",
+                "https://via.placeholder.com/400x200?text=Weight+Loss+Plan" // Replace with a real image URL
+        ));
+        // Add more initial nutrition plans here
+
+        for (NutritionPlan plan : initialPlans) {
+            Map<String, Object> nutritionPlanMap = new HashMap<>();
+            nutritionPlanMap.put("title", plan.getTitle());
+            nutritionPlanMap.put("description", plan.getDescription());
+            nutritionPlanMap.put("imageUrl", plan.getImageUrl());
+
+            db.collection("nutritionPlans")
+                    .add(nutritionPlanMap)
+                    .addOnSuccessListener(documentReference -> {
+                        // Optionally, log success or show a toast
+                        Log.d("Firestore", "Document added with ID: " + documentReference.getId());
+                    })
+                    .addOnFailureListener(e -> {
+                        // Optionally, log error or show a toast
+                        Log.w("Firestore", "Error adding document", e);
+                        Toast.makeText(NutritionActivity.this, "Error adding initial data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        }
+    }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
