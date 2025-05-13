@@ -56,6 +56,7 @@ public class ProgressTrackingActivity extends AppCompatActivity implements Navig
     private WorkoutHistoryAdapter workoutAdapter;
     private LineChart workoutChart;
 
+    // This list will hold the WorkoutSession objects for the RecyclerView
     private List<WorkoutSession> workoutSessions = new ArrayList<>();
     private FirebaseFirestore firestore;
 
@@ -106,6 +107,7 @@ public class ProgressTrackingActivity extends AppCompatActivity implements Navig
 
         // Setup RecyclerView
         workoutHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Pass the list to the adapter
         workoutAdapter = new WorkoutHistoryAdapter(workoutSessions);
         workoutHistoryRecyclerView.setAdapter(workoutAdapter);
 
@@ -181,7 +183,7 @@ public class ProgressTrackingActivity extends AppCompatActivity implements Navig
 
         firestore.collection("users").document(userId)
                 .collection("workouts")
-                .orderBy("date", Query.Direction.DESCENDING)
+                .orderBy("date", Query.Direction.DESCENDING) // Order by timestamp field "date"
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -203,43 +205,86 @@ public class ProgressTrackingActivity extends AppCompatActivity implements Navig
                         SimpleDateFormat dateFormatForChart = new SimpleDateFormat("MMM dd", Locale.getDefault());
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            WorkoutSession workoutSession = document.toObject(WorkoutSession.class);
-                            workoutSessions.add(workoutSession);
+                            // Manually extract data from the document
+                            String id = document.getId(); // Get the document ID
+                            String sessionUserId = document.getString("userId");
+                            // Read the timestamp using the field name you are saving ("date")
+                            Long timestamp = document.getLong("date");
+                            String workoutName = document.getString("workoutName");
+                            // Read durationSeconds as a Long
+                            Long durationSecondsLong = document.getLong("durationSeconds");
+                            long durationSeconds = (durationSecondsLong != null) ? durationSecondsLong : 0;
 
-                            if (workoutSession.getDate() >= startOfWeekTimestamp) {
-                                totalCaloriesThisWeek += workoutSession.getEstimatedCaloriesBurned();
+                            // Read estimatedCaloriesBurned as a Long, then convert to int
+                            Long estimatedCaloriesBurnedLong = document.getLong("estimatedCaloriesBurned");
+                            int estimatedCaloriesBurned = (estimatedCaloriesBurnedLong != null) ? estimatedCaloriesBurnedLong.intValue() : 0;
+                            String notes = document.getString("notes");
+                            // Read details map
+                            Map<String, Object> details = document.get("details") != null ? (Map<String, Object>) document.get("details") : null;
+
+                            // Create a WorkoutSession object using the no-argument constructor and setters
+                            WorkoutSession workoutSession = new WorkoutSession();
+                            workoutSession.setId(id);
+                            workoutSession.setUserId(sessionUserId);
+                            workoutSession.setDate(timestamp != null ? timestamp : 0); // Use timestamp for date
+                            workoutSession.setWorkoutName(workoutName);
+                            workoutSession.setDurationSeconds(durationSeconds); // Set the duration in seconds
+                            workoutSession.setEstimatedCaloriesBurned(estimatedCaloriesBurned); // Set the estimated calories
+                            workoutSession.setNotes(notes);
+                            if (details != null) {
+                                workoutSession.setDetails(details);
                             }
 
-                            // Aggregate daily calories for the chart
-                            String dateString = dateFormatForChart.format(new Date(workoutSession.getDate()));
-                            dailyCalories.put(dateString, dailyCalories.getOrDefault(dateString, 0) + workoutSession.getEstimatedCaloriesBurned());
+                            // For chart aggregation and RecyclerView, we use the date and calorie data
+                            if (timestamp != null) {
+                                workoutSessions.add(workoutSession); // Add to the list for RecyclerView
+
+                                if (timestamp >= startOfWeekTimestamp) {
+                                    totalCaloriesThisWeek += estimatedCaloriesBurned;
+
+                                    // Aggregate calories burned by day for the chart
+                                    String dateKey = dateFormatForChart.format(new Date(timestamp));
+                                    dailyCalories.put(dateKey, dailyCalories.getOrDefault(dateKey, 0) + estimatedCaloriesBurned);
+                                }
+                            }
                         }
 
-                        // Prepare data for the chart, sorted by date
-                        List<Map.Entry<String, Integer>> sortedDailyCalories = new ArrayList<>(dailyCalories.entrySet());
-                        Collections.sort(sortedDailyCalories, (entry1, entry2) -> {
+                        // After the loop, you can update UI elements that depend on the loaded data
+                        // For example, update the RecyclerView adapter
+                        workoutAdapter.notifyDataSetChanged();
+
+                        // Update total calories burned for the week
+                        updateProgressUI(totalCaloriesThisWeek);
+                        // You would also load goals here if you implement goal tracking and update accordingly
+
+                        // Process dailyCalories map to create chart entries and labels
+                        List<String> sortedDates = new ArrayList<>(dailyCalories.keySet());
+                        Collections.sort(sortedDates, (date1, date2) -> {
                             try {
-                                Date date1 = dateFormatForChart.parse(entry1.getKey());
-                                Date date2 = dateFormatForChart.parse(entry2.getKey());
-                                return date1.compareTo(date2);
+                                Date d1 = dateFormatForChart.parse(date1);
+                                Date d2 = dateFormatForChart.parse(date2);
+                                return d1.compareTo(d2);
                             } catch (ParseException e) {
+                                Log.e("ProgressTracking", "Error parsing date for sorting", e);
                                 return 0;
                             }
                         });
 
-                        for (int i = 0; i < sortedDailyCalories.size(); i++) {
-                            Map.Entry<String, Integer> entry = sortedDailyCalories.get(i);
-                            chartEntries.add(new Entry(i, entry.getValue()));
-                            chartLabels.add(entry.getKey());
+                        for (int i = 0; i < sortedDates.size(); i++) {
+                            String date = sortedDates.get(i);
+                            Integer calories = dailyCalories.get(date);
+                            if (calories != null) {
+                                chartEntries.add(new Entry(i, calories.floatValue()));
+                                chartLabels.add(date);
+                            }
                         }
 
-
-                        workoutAdapter.notifyDataSetChanged();
-                        updateProgressUI(totalCaloriesThisWeek);
+                        // Create and set the data for the chart
                         updateChart(chartEntries, chartLabels);
 
+
                     } else {
-                        Log.w("Firestore", "Error getting documents: ", task.getException());
+                        Log.w("ProgressTracking", "Error getting documents: ", task.getException());
                     }
                 });
     }
@@ -287,6 +332,7 @@ public class ProgressTrackingActivity extends AppCompatActivity implements Navig
         workoutChart.invalidate(); // Refresh the chart
     }
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
@@ -317,46 +363,7 @@ public class ProgressTrackingActivity extends AppCompatActivity implements Navig
         }
     }
 
-    // Example functions for adding, updating, and deleting data (add these as needed)
-    // You would typically call these from other activities or fragments where
-    // the user performs actions like logging a workout or setting a goal.
-
-    public void addWorkoutSession(WorkoutSession workoutSession) {
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null) {
-            return;
-        }
-        String userId = user.getUid();
-
-        // Use a HashMap to store the details for Firestore
-        Map<String, Object> detailsMap = null;
-        if (workoutSession.getDetails() != null) {
-            detailsMap = new HashMap<>(workoutSession.getDetails());
-        }
-
-
-        Map<String, Object> workoutData = new HashMap<>();
-        workoutData.put("userId", workoutSession.getUserId());
-        workoutData.put("date", workoutSession.getDate());
-        workoutData.put("workoutName", workoutSession.getWorkoutName());
-        workoutData.put("durationMinutes", workoutSession.getDurationMinutes());
-        workoutData.put("estimatedCaloriesBurned", workoutSession.getEstimatedCaloriesBurned());
-        workoutData.put("details", detailsMap); // Store the details map
-
-
-        firestore.collection("users").document(userId)
-                .collection("workouts")
-                .add(workoutData)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d("Firestore", "Workout session added with ID: " + documentReference.getId());
-                    // Optionally, refresh your data after adding
-                    // loadWorkoutData(); // Uncomment if you want to refresh the view immediately
-                })
-                .addOnFailureListener(e -> {
-                    Log.w("Firestore", "Error adding workout session", e);
-                });
-    }
-
+    // Keep update and delete methods if you use them elsewhere
     public void updateGoalProgress(String goalId, double newCurrentValue) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
@@ -377,7 +384,7 @@ public class ProgressTrackingActivity extends AppCompatActivity implements Navig
                 });
     }
 
-    public void deleteWorkoutSession(String workoutId) {
+    public void deleteGoal(String goalId) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) {
             return;
@@ -385,17 +392,15 @@ public class ProgressTrackingActivity extends AppCompatActivity implements Navig
         String userId = user.getUid();
 
         firestore.collection("users").document(userId)
-                .collection("workouts").document(workoutId)
+                .collection("goals").document(goalId)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    Log.d("Firestore", "Workout session deleted successfully!");
-                    // Optionally, refresh your data after deleting
-                    loadWorkoutData();
+                    Log.d("Firestore", "Goal deleted successfully!");
+                    // Optionally, refresh goals data if needed
+                    // loadGoalsData(); // Assuming you have a method to load goals
                 })
                 .addOnFailureListener(e -> {
-                    Log.w("Firestore", "Error deleting workout session", e);
+                    Log.w("Firestore", "Error deleting goal", e);
                 });
     }
-
-    // Add other data manipulation methods as needed (e.g., updateWorkoutSession)
 }

@@ -29,14 +29,27 @@ public class WorkoutHistoryAdapter extends RecyclerView.Adapter<WorkoutHistoryAd
         return new WorkoutViewHolder(itemView);
     }
 
-    @SuppressLint("SetTextI18WithPlaceholders")
+    @SuppressLint("SetTextI18n") // Use SetTextI18n when concatenating strings with setText
     @Override
     public void onBindViewHolder(@NonNull WorkoutViewHolder holder, int position) {
         WorkoutSession currentWorkout = workoutSessions.get(position);
 
-        // FIX: Use getWorkoutName() instead of getWorkoutType()
         holder.workoutTypeTextView.setText(currentWorkout.getWorkoutName());
-        holder.durationTextView.setText("Duration: " + currentWorkout.getDurationMinutes() + " minutes");
+
+        // Calculate minutes and seconds from total seconds
+        long totalSeconds = currentWorkout.getDurationSeconds();
+        long minutes = totalSeconds / 60;
+        long remainingSeconds = totalSeconds % 60;
+
+        // Format and display duration
+        String durationString;
+        if (minutes > 0) {
+            durationString = String.format(Locale.getDefault(), "Duration: %d min %d sec", minutes, remainingSeconds);
+        } else {
+            durationString = String.format(Locale.getDefault(), "Duration: %d sec", remainingSeconds);
+        }
+        holder.durationTextView.setText(durationString);
+
         holder.caloriesBurnedTextView.setText("Calories Burned: " + currentWorkout.getEstimatedCaloriesBurned() + " kcal");
 
         // Format the date
@@ -47,7 +60,6 @@ public class WorkoutHistoryAdapter extends RecyclerView.Adapter<WorkoutHistoryAd
         Map<String, Object> detailsMap = currentWorkout.getDetails();
         if (detailsMap != null && !detailsMap.isEmpty()) {
             holder.workoutDetailsTextView.setVisibility(View.VISIBLE);
-            // FIX: Pass getWorkoutName() to buildDetailsString
             String detailsText = buildDetailsString(detailsMap, currentWorkout.getWorkoutName());
             holder.workoutDetailsTextView.setText("Details: " + detailsText);
         } else {
@@ -95,7 +107,7 @@ public class WorkoutHistoryAdapter extends RecyclerView.Adapter<WorkoutHistoryAd
         TextView workoutDetailsTextView;
 
         public WorkoutViewHolder(@NonNull View itemView) {
-            super(itemView);
+            super(itemView); // Corrected line
             workoutTypeTextView = itemView.findViewById(R.id.workoutTypeTextView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
             durationTextView = itemView.findViewById(R.id.durationTextView);

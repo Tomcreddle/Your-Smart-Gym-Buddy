@@ -1,8 +1,8 @@
-package com.example.yoursmartgymbuddy; // << REPLACE WITH YOUR PACKAGE NAME
+package com.example.yoursmartgymbuddy;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log; // Import Log
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -41,6 +41,9 @@ public class NutritionActivity extends AppCompatActivity implements NavigationVi
     private NutritionAdapter nutritionAdapter;
     private List<NutritionPlan> nutritionPlans;
 
+    // Define the name of the shared collection for nutrition plans
+    private static final String SHARED_NUTRITION_COLLECTION = "sharedNutritionPlans";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,21 +81,20 @@ public class NutritionActivity extends AppCompatActivity implements NavigationVi
         // RecyclerView setup
         nutritionRecyclerView = findViewById(R.id.nutritionRecyclerView);
         nutritionPlans = new ArrayList<>();
-        // You will need to create a NutritionAdapter class that extends RecyclerView.Adapter
-        // and a NutritionPlan class to hold your data.
         nutritionAdapter = new NutritionAdapter(nutritionPlans, this);
         nutritionRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         nutritionRecyclerView.setAdapter(nutritionAdapter);
 
         db = FirebaseFirestore.getInstance();
 
-        // Call this method ONCE to add initial data to Firestore
-        // UNCOMMENT the line below, run your app once to populate the database,
-        // then COMMENT it out again.
-        // addInitialNutritionPlans();
+        // *** IMPORTANT ***
+        // Call this method ONCE during development to add initial data to the shared collection.
+        // After the data is added, COMMENT OUT this line to avoid adding duplicate data
+        // every time the activity starts.
+        // addInitialNutritionPlansToSharedCollection();
 
-        // Fetch data from Firestore
-        fetchNutritionPlans();
+        // Fetch data from the shared Firestore collection
+        fetchSharedNutritionPlans();
 
         // ✅ BottomNavigationView setup
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
@@ -133,64 +135,75 @@ public class NutritionActivity extends AppCompatActivity implements NavigationVi
         });
     }
 
-    // Method to fetch nutrition plans from Firestore
-    private void fetchNutritionPlans() {
-        db.collection("nutritionPlans")
+    // Method to fetch nutrition plans from the shared Firestore collection
+    private void fetchSharedNutritionPlans() {
+        Log.d("Firestore", "Attempting to fetch nutrition plans from shared collection: " + SHARED_NUTRITION_COLLECTION);
+
+        // Query the shared nutrition plans collection
+        db.collection(SHARED_NUTRITION_COLLECTION)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     nutritionPlans.clear(); // Clear existing data before adding new
+                    Log.d("FirestoreData", "Fetched " + queryDocumentSnapshots.size() + " documents from shared collection.");
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        // Ensure these fields exist in your Firestore documents
-                        String title = doc.getString("title");
-                        String description = doc.getString("description");
-                        String imageUrl = doc.getString("imageUrl");
-                        // Ensure the NutritionPlan constructor matches these parameters
-                        nutritionPlans.add(new NutritionPlan(title, description, imageUrl));
+                        // Use toObject() to convert the document directly to your NutritionPlan object
+                        try {
+                            NutritionPlan nutritionPlan = doc.toObject(NutritionPlan.class);
+                            nutritionPlans.add(nutritionPlan);
+                            Log.d("FirestoreData", "Added Shared Nutrition Plan: " + nutritionPlan.getTitle());
+                        } catch (Exception e) {
+                            Log.e("FirestoreData", "Error converting document to NutritionPlan", e);
+                            // Handle potential errors during conversion
+                        }
                     }
+                    Log.d("FirestoreData", "Before notifyDataSetChanged, total items: " + nutritionPlans.size());
                     nutritionAdapter.notifyDataSetChanged();
+                    Log.d("FirestoreData", "Adapter notified.");
                 })
                 .addOnFailureListener(e -> {
-                    Log.w("Firestore", "Error fetching data", e); // Log the error for debugging
+                    Log.w("Firestore", "Error fetching data from shared collection", e); // Log the error for debugging
                     Toast.makeText(NutritionActivity.this, "Error fetching data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
-    // Method to add initial nutrition plans to Firestore
-    private void addInitialNutritionPlans() {
-        List<NutritionPlan> initialPlans = new ArrayList<>();
-        initialPlans.add(new NutritionPlan(
-                "Balanced Diet",
-                "A balanced diet includes a variety of foods from all food groups in the right proportions. This plan focuses on whole grains, lean proteins, fruits, vegetables, and healthy fats. It provides the necessary nutrients for overall health and well-being.",
-                "https://via.placeholder.com/400x200?text=Balanced+Diet" // Replace with a real image URL
-        ));
-        initialPlans.add(new NutritionPlan(
-                "High-Protein Meal Plan",
-                "This plan is designed for muscle growth and repair, featuring meals rich in lean protein sources like chicken breast, fish, eggs, and legumes. It's often combined with strength training for best results.",
-                "https://via.placeholder.com/400x200?text=High-Protein+Plan" // Replace with a real image URL
-        ));
-        initialPlans.add(new NutritionPlan(
-                "Weight Loss Plan",
-                "A calorie-controlled plan that emphasizes nutrient-dense foods to help create a calorie deficit. It typically involves portion control and limiting processed foods, sugary drinks, and unhealthy fats.",
-                "https://via.placeholder.com/400x200?text=Weight+Loss+Plan" // Replace with a real image URL
-        ));
-        // Add more initial nutrition plans here
+    // Method to add initial nutrition plans to the shared Firestore collection
+    // *** IMPORTANT: Only call this method ONCE during development ***
+    private void addInitialNutritionPlansToSharedCollection() {
+        List<Map<String, Object>> initialPlans = new ArrayList<>();
 
-        for (NutritionPlan plan : initialPlans) {
-            Map<String, Object> nutritionPlanMap = new HashMap<>();
-            nutritionPlanMap.put("title", plan.getTitle());
-            nutritionPlanMap.put("description", plan.getDescription());
-            nutritionPlanMap.put("imageUrl", plan.getImageUrl());
+        // Balanced Diet
+        Map<String, Object> balancedDiet = new HashMap<>();
+        balancedDiet.put("title", "Balanced Diet");
+        balancedDiet.put("description", "A balanced diet includes a variety of foods from all food groups in the right proportions. This plan focuses on whole grains, lean proteins, fruits, vegetables, and healthy fats. It provides the necessary nutrients for overall health and well-being.");
+        balancedDiet.put("imageUrl", "https://via.placeholder.com/400x200?text=Balanced+Diet"); // Replace with a real image URL
+        initialPlans.add(balancedDiet);
 
-            db.collection("nutritionPlans")
-                    .add(nutritionPlanMap)
+        // High-Protein Meal Plan
+        Map<String, Object> highProteinPlan = new HashMap<>();
+        highProteinPlan.put("title", "High-Protein Meal Plan");
+        highProteinPlan.put("description", "This plan is designed for muscle growth and repair, featuring meals rich in lean protein sources like chicken breast, fish, eggs, and legumes. It's often combined with strength training for best results.");
+        highProteinPlan.put("imageUrl", "https://via.placeholder.com/400x200?text=High-Protein+Plan"); // Replace with a real image URL
+        initialPlans.add(highProteinPlan);
+
+        // Weight Loss Plan
+        Map<String, Object> weightLossPlan = new HashMap<>();
+        weightLossPlan.put("title", "Weight Loss Plan");
+        weightLossPlan.put("description", "A calorie-controlled plan that emphasizes nutrient-dense foods to help create a calorie deficit. It typically involves portion control and limiting processed foods, sugary drinks, and unhealthy fats.");
+        weightLossPlan.put("imageUrl", "https://via.placeholder.com/400x200?text=Weight+Loss+Plan"); // Replace with a real image URL
+        initialPlans.add(weightLossPlan);
+
+        // Add more initial nutrition plans here as needed
+
+        for (Map<String, Object> planMap : initialPlans) {
+            // Add data to the shared collection
+            db.collection(SHARED_NUTRITION_COLLECTION)
+                    .add(planMap)
                     .addOnSuccessListener(documentReference -> {
-                        // Optionally, log success or show a toast
-                        Log.d("Firestore", "Document added with ID: " + documentReference.getId());
+                        Log.d("Firestore", "Initial shared nutrition plan document added with ID: " + documentReference.getId());
                     })
                     .addOnFailureListener(e -> {
-                        // Optionally, log error or show a toast
-                        Log.w("Firestore", "Error adding document", e);
-                        Toast.makeText(NutritionActivity.this, "Error adding initial data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.w("Firestore", "Error adding initial shared nutrition plan document", e);
+                        // You might want to show a Toast or log the error more prominently during development
                     });
         }
     }

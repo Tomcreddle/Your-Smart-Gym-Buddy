@@ -11,7 +11,8 @@ public class WorkoutSession {
     private String userId;
     private long date; // Use a timestamp (milliseconds since epoch)
     private String workoutName; // Renamed from workoutType to match the data being saved
-    private int durationMinutes;
+    private int durationMinutes; // Keeping for potential backward compatibility or simplified display
+    private long durationSeconds; // Added field for duration in seconds
     private int estimatedCaloriesBurned;
     private String notes; // Added field for notes
     private Map<String, Object> details; // Optional: Uncomment if you need to store type-specific details
@@ -20,26 +21,28 @@ public class WorkoutSession {
     public WorkoutSession() {
     }
 
-    // Updated constructor to match the data being saved from WorkoutDetailActivity
-    // Added the notes field
-    public WorkoutSession(String userId, long date, String workoutName, int durationMinutes, int estimatedCaloriesBurned, String notes) {
+    // Updated constructor to include duration in seconds
+    public WorkoutSession(String userId, long date, String workoutName, long durationSeconds, int estimatedCaloriesBurned, String notes) {
         this.userId = userId;
         this.date = date;
         this.workoutName = workoutName;
-        this.durationMinutes = durationMinutes;
+        this.durationSeconds = durationSeconds;
+        // Calculate durationMinutes based on seconds
+        this.durationMinutes = (int) (durationSeconds / 60);
         this.estimatedCaloriesBurned = estimatedCaloriesBurned;
         this.notes = notes;
         // You might want to initialize the details map here if you're using it:
         // this.details = new HashMap<>();
     }
 
-    // Constructor including details (if you are saving details)
-    // Added the notes field
-    public WorkoutSession(String userId, long date, String workoutName, int durationMinutes, int estimatedCaloriesBurned, String notes, Map<String, Object> details) {
+    // Constructor including details and duration in seconds
+    public WorkoutSession(String userId, long date, String workoutName, long durationSeconds, int estimatedCaloriesBurned, String notes, Map<String, Object> details) {
         this.userId = userId;
         this.date = date;
         this.workoutName = workoutName;
-        this.durationMinutes = durationMinutes;
+        this.durationSeconds = durationSeconds;
+        // Calculate durationMinutes based on seconds
+        this.durationMinutes = (int) (durationSeconds / 60);
         this.estimatedCaloriesBurned = estimatedCaloriesBurned;
         this.notes = notes;
         this.details = details;
@@ -64,8 +67,14 @@ public class WorkoutSession {
         return workoutName;
     }
 
+    // Keeping for potential backward compatibility or simplified display
     public int getDurationMinutes() {
         return durationMinutes;
+    }
+
+    // Added getter for duration in seconds
+    public long getDurationSeconds() {
+        return durationSeconds;
     }
 
     public int getEstimatedCaloriesBurned() {
@@ -102,9 +111,19 @@ public class WorkoutSession {
         this.workoutName = workoutName;
     }
 
+    // Keeping for potential backward compatibility or simplified display
+    // If setting duration in minutes, you might want to update seconds as well
     public void setDurationMinutes(int durationMinutes) {
         this.durationMinutes = durationMinutes;
+        this.durationSeconds = durationMinutes * 60; // Update seconds based on minutes
     }
+
+    // Added setter for duration in seconds
+    public void setDurationSeconds(long durationSeconds) {
+        this.durationSeconds = durationSeconds;
+        this.durationMinutes = (int) (durationSeconds / 60); // Update minutes based on seconds
+    }
+
 
     public void setEstimatedCaloriesBurned(int estimatedCaloriesBurned) {
         this.estimatedCaloriesBurned = estimatedCaloriesBurned;
