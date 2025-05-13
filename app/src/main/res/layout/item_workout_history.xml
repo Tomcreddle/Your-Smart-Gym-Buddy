@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/rounded_corners_background" > <!-- Optional: create a drawable for rounded corners -->
+
+    <TextView
+        android:id="@+id/workoutTypeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Weightlifting"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Jan 01, 2024 10:00"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/durationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Duration: 60 minutes"
+        android:textSize="16sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/caloriesBurnedTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Calories Burned: 500 kcal"
+        android:textSize="16sp"
+        android:textColor="@color/black"/>
+
+    <!-- Add other TextViews for specific details if needed. You'll need to handle these based on workout type in the adapter -->
+    <TextView
+        android:id="@+id/workoutDetailsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Details: 3 sets of 10 reps at 50kg"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:visibility="gone"/> <!-- Initially hidden, show if details exist -->
+
+</LinearLayout>
