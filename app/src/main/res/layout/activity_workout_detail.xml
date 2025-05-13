@@ -66,7 +66,6 @@
         android:layout_marginTop="16dp"
         android:textColor="@android:color/black"/>
 
-
     <TextView
         android:id="@+id/timerTextView"
         android:layout_width="wrap_content"
@@ -82,6 +81,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Added the Complete Workout Button -->
+    <Button
+        android:id="@+id/completeWorkoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Complete Workout"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"/>
 

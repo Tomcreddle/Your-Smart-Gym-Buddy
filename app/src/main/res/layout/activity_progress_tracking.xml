@@ -2,10 +2,12 @@
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA">
+    android:background="#FAFAFA"
+    tools:context=".ProgressTrackingActivity">
 
     <!-- Main content inside CoordinatorLayout -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -13,33 +15,120 @@
         android:layout_height="match_parent">
 
         <!-- Toolbar -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/workoutToolbar"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#626F47"
-            android:elevation="4dp"
-            android:title="Progress Tracking"
-            android:titleTextColor="@android:color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/workoutToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:elevation="4dp"
+                app:titleTextColor="@android:color/white"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        </com.google.android.material.appbar.AppBarLayout>
+
 
         <!-- Content below toolbar -->
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Progress Tracking"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="#2196F3" />
-        </LinearLayout>
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Overall Progress"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Example: Progress bar for a goal -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weekly Calorie Goal Progress"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="4dp"/>
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/goalProgressIndicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:trackCornerRadius="4dp"
+                    app:indicatorColor="@color/purple_200"/>
+
+                <TextView
+                    android:id="@+id/goalProgressText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Progress: 0%"
+                    android:layout_gravity="end"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calories Burned This Week"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/caloriesBurnedText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total: 0 kcal"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Placeholder for a chart -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Workout Progress Chart"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="8dp"/>
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/workoutChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginBottom="16dp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Workout History"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- Example: RecyclerView for workout history -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/workoutHistoryRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/item_workout_history"/> <!-- Helps with preview -->
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"

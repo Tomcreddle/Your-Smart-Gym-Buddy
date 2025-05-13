@@ -1,3 +1,5 @@
+import org.apache.tools.ant.util.JavaEnvUtils.VERSION_11
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
@@ -41,39 +43,48 @@ android {
     // }
 }
 
-
-
 dependencies {
     // Basic Libraries
     implementation(libs.appcompat)
-    implementation(libs.material)  // Add this line
-    implementation("com.google.android.material:material:1.4.0")  // or the latest version
-    implementation("com.google.gms:google-services:4.4.1")
+    // Using the material dependency from libs.versions.toml
+    implementation(libs.material)
 
-    implementation ("androidx.recyclerview:recyclerview:1.2.1")
+    // Using dependencies from libs.versions.toml where possible
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+
+    // Explicit declarations - consider moving to libs.versions.toml
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
 
     // Firebase
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    // Using the firestore dependency from libs.versions.toml
     implementation(libs.firebase.firestore)
 
-    implementation ("org.osmdroid:osmdroid-android:6.1.16")
-    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation ("com.google.code.gson:gson:2.8.9")
-    implementation("com.google.firebase:firebase-firestore")
+
+    // Explicit declarations - consider moving to libs.versions.toml
+    implementation("org.osmdroid:osmdroid-android:6.1.16")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.google.code.gson:gson:2.8.9")
 
 
     // Play Services (for authentication, if needed)
     implementation(libs.credentials.play.services.auth)
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+
+    // Glide and MPAndroidChart
+    // Using aliases from libs.versions.toml
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler) // Ensure 'compiler' is the alias for Glide's annotation processor
+
+    // Using the mpandroidchart dependency from libs.versions.toml
+    implementation(libs.mpandroidchart)
+
 
     // Testing Libraries
-    testImplementation(libs.junit)
+    implementation(libs.junit) // Should be testImplementation
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
