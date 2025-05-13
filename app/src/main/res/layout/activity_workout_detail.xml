@@ -1,96 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".WorkoutDetailActivity">
 
-    <ImageView
-        android:id="@+id/workoutDetailImage"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/placeholder" />
-
-    <TextView
-        android:id="@+id/workoutDetailName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Workout Name"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        android:textColor="@android:color/black"/>
-
-    <TextView
-        android:id="@+id/workoutDetailSetsRepsDuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sets: X, Reps: Y, Duration: Z"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp"
-        android:textColor="@android:color/darker_gray"/>
-
-    <!-- New TextView for Target Muscle Group -->
-    <TextView
-        android:id="@+id/workoutDetailTarget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Target: Muscle Group"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp"
-        android:textStyle="italic"
-        android:textColor="@android:color/darker_gray"/>
-
-    <!-- TextView for Description (already exists) -->
-    <TextView
-        android:id="@+id/workoutDetailDescription"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Detailed description of the workout."
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        android:textColor="@android:color/black"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <!-- New TextView for Instructions -->
-    <TextView
-        android:id="@+id/workoutDetailInstructions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Instructions:\nStep 1:...\nStep 2:..."
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        android:textColor="@android:color/black"/>
+        <ImageView
+            android:id="@+id/workoutDetailImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder" />
 
-    <TextView
-        android:id="@+id/timerTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00:00"
-        android:textSize="48sp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="32dp"
-        android:textColor="@android:color/black"/>
+        <TextView
+            android:id="@+id/workoutDetailName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Workout Name"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:textColor="@android:color/black"/>
 
-    <Button
-        android:id="@+id/startTimerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"/>
+        <TextView
+            android:id="@+id/workoutDetailSetsRepsDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sets: X, Reps: Y, Duration: Z"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/darker_gray"/>
 
-    <!-- Added the Complete Workout Button -->
-    <Button
-        android:id="@+id/completeWorkoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Complete Workout"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"/>
+        <TextView
+            android:id="@+id/workoutDetailTarget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Target: Muscle Group"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:textStyle="italic"
+            android:textColor="@android:color/darker_gray"/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/workoutDetailDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Detailed description of the workout."
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:id="@+id/workoutDetailInstructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Instructions:\nStep 1:...\nStep 2:..."
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:id="@+id/timerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textSize="48sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+            android:textColor="@android:color/black"/>
+
+        <Button
+            android:id="@+id/startTimerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/completeWorkoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Complete Workout"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+</ScrollView>
