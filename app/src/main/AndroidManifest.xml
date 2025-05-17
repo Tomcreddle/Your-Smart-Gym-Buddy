@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -16,72 +17,52 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YourSmartGymBuddy"
         tools:targetApi="31">
-        <activity
-            android:name=".AI"
-            android:exported="false" />
-        <!-- Apache HTTP (for osmdroid legacy support) -->
-        <uses-library
-            android:name="org.apache.http.legacy"
-            android:required="false" /> <!-- All activities -->
-        <activity
-            android:name=".Maps"
-            android:exported="false" />
-        <activity
-            android:name=".AccountSettings"
-            android:exported="false" />
-        <activity
-            android:name=".ToDoList"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true" />
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="true" />
-        <activity
-            android:name=".DashBoardActivity"
-            android:exported="true" />
-        <activity
-            android:name=".WorkoutPlansActivity"
-            android:exported="true" />
-        <activity
-            android:name=".NutritionActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ProgressTrackingActivity"
-            android:exported="true" />
-        <activity
-            android:name=".WorkoutsActivity"
-            android:exported="true" />
 
-        <!-- Add the declaration for WorkoutDetailActivity here -->
-        <activity android:name=".WorkoutDetailActivity" />
-
-        <!-- Splash Activity (launcher) -->
+        <!-- Main Activity / Splash -->
         <activity
             android:name=".SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.YourSmartGymBuddy.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- App Widget -->
+        </activity>
+
+        <!-- Core Activities -->
+        <activity android:name=".MainActivity" android:exported="true" />
+        <activity android:name=".LoginActivity" android:exported="true" />
+        <activity android:name=".SignUpActivity" android:exported="true" />
+        <activity android:name=".DashBoardActivity" android:exported="true" />
+        <activity android:name=".WorkoutPlansActivity" android:exported="true" />
+        <activity android:name=".NutritionActivity" android:exported="true" />
+        <activity android:name=".ProgressTrackingActivity" android:exported="true" />
+        <activity android:name=".WorkoutsActivity" android:exported="true" />
+        <activity android:name=".WorkoutDetailActivity" android:exported="true" />
+
+        <!-- Supporting Activities -->
+        <activity android:name=".ToDoList" android:exported="false" />
+        <activity android:name=".AccountSettings" android:exported="false" />
+        <activity android:name=".Maps" android:exported="false" />
+        <activity android:name=".AI" android:exported="false" />
+
+        <!-- osmdroid (legacy HTTP library support) -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <!-- App Widget Receiver -->
         <receiver
             android:name=".NewAppWidget"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/new_app_widget_info" />
         </receiver>
+
     </application>
 
 </manifest>

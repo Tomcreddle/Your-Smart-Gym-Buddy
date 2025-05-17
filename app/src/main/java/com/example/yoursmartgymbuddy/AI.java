@@ -35,15 +35,13 @@ public class AI extends AppCompatActivity {
     private ChatAdapter chatAdapter;
     private final List<ChatMessage> messages = new ArrayList<>();
 
-    private static final String OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ai);
 
-        // Retrieve the API key from strings.xml
-        String openaiApiKey = getString(R.string.openai_api_key);
+        // Retrieve Gemini API key from strings.xml
+        String geminiApiKey = getString(R.string.gemini_api_key);
 
         // Initialize views
         chatRecyclerView = findViewById(R.id.chatRecyclerView);
@@ -61,7 +59,7 @@ public class AI extends AppCompatActivity {
             if (!input.isEmpty()) {
                 addMessage(input, ChatMessage.SENT_BY_USER);
                 userInput.setText("");
-                sendToOpenAI(input, openaiApiKey);
+                sendToGemini(input, geminiApiKey);
             }
         });
 
@@ -76,22 +74,27 @@ public class AI extends AppCompatActivity {
         });
     }
 
-    private void sendToOpenAI(String prompt, String apiKey) {
+    private void sendToGemini(String prompt, String apiKey) {
         OkHttpClient client = new OkHttpClient();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
         String bodyJson = "{\n" +
-                "  \"model\": \"gpt-3.5-turbo\",\n" +
-                "  \"messages\": [\n" +
-                "    {\"role\": \"user\", \"content\": \"" + prompt + "\"}\n" +
+                "  \"contents\": [\n" +
+                "    {\n" +
+                "      \"parts\": [\n" +
+                "        {\"text\": \"" + prompt + "\"}\n" +
+                "      ]\n" +
+                "    }\n" +
                 "  ]\n" +
                 "}";
 
+        String GEMINI_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + apiKey;
+
         RequestBody body = RequestBody.create(bodyJson, JSON);
         Request request = new Request.Builder()
-                .url(OPENAI_ENDPOINT)
-                .header("Authorization", "Bearer " + apiKey)
+                .url(GEMINI_ENDPOINT)
                 .post(body)
+                .addHeader("Content-Type", "application/json")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -106,21 +109,19 @@ public class AI extends AppCompatActivity {
                     try {
                         String result = response.body().string();
                         JSONObject obj = new JSONObject(result);
-                        JSONArray choices = obj.getJSONArray("choices");
-                        String reply = choices.getJSONObject(0)
-                                .getJSONObject("message")
-                                .getString("content");
+                        JSONArray candidates = obj.getJSONArray("candidates");
+                        String reply = candidates.getJSONObject(0)
+                                .getJSONObject("content")
+                                .getJSONArray("parts")
+                                .getJSONObject(0)
+                                .getString("text");
                         addMessage(reply.trim(), ChatMessage.SENT_BY_BOT);
                     } catch (JSONException e) {
                         addMessage("JSON parse error: " + e.getMessage(), ChatMessage.SENT_BY_BOT);
                     }
                 } else {
-                    try {
-                        String result = response.body().string();
-                        addMessage("API error: " + result, ChatMessage.SENT_BY_BOT);  // Log the actual response body
-                    } catch (IOException e) {
-                        addMessage("Error reading response: " + e.getMessage(), ChatMessage.SENT_BY_BOT);  // Handle IO errors
-                    }
+                    String errorBody = response.body().string();
+                    addMessage("API error: " + errorBody, ChatMessage.SENT_BY_BOT);
                 }
             }
         });

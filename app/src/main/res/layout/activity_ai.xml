@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA"
+    android:background="#F2EED7"
     android:id="@+id/main"
     tools:context=".AI">
 
@@ -12,18 +12,22 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_above="@id/messageInputLayout"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp" />
 
     <!-- Message input and send button -->
+
+    <!-- Bottom Navigation Bar -->
     <LinearLayout
         android:id="@+id/messageInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottomNavigationView"
+        android:layout_marginBottom="13dp"
+        android:background="#B8FFFFFF"
         android:orientation="horizontal"
         android:padding="8dp">
 
@@ -42,19 +46,20 @@
             android:text="Send" />
     </LinearLayout>
 
-    <!-- Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="54dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/bottom_background"
         android:elevation="2dp"
         app:itemIconSize="30dp"
-        app:itemIconTint="@drawable/item_selector"
-        app:itemRippleColor="@android:color/transparent"
-        app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/bottom_menu" />
+    app:itemIconTint="@drawable/item_selector"
+    app:itemRippleColor="@android:color/transparent"
+    app:labelVisibilityMode="unlabeled"
+    app:menu="@menu/bottom_menu" />
 
-</RelativeLayout>
+    </RelativeLayout>
